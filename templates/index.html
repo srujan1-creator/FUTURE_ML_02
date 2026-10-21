@@ -2,314 +2,269 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sales & Demand Forecasting Intelligence</title>
-  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Ticket Intelligence | NLP Decision-Support</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    .slider-thumb::-webkit-slider-thumb {
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #4f46e5;
-      cursor: pointer;
-    }
+    body { font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-6">
-  <div class="max-w-6xl mx-auto space-y-6">
-
-    <!-- Header Hero -->
-    <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-[var(--border)] rounded-2xl p-6 text-white shadow-lg">
-      <h1 class="text-2xl font-bold tracking-tight">Executive Sales & Demand Forecasting Intelligence</h1>
-      <p class="text-slate-300 text-sm mt-1">Machine Learning decision support for inventory reordering, cash runway, and warehouse staffing.</p>
-    </div>
-
-    <!-- Interactive Top Controls -->
-    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div>
-        <label class="text-xs font-semibold text-[var(--muted-foreground)] uppercase">Department</label>
-        <select id="deptSelect" onchange="updateDashboard()" class="w-full mt-1.5 p-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-sm text-[var(--foreground)] font-medium">
-          <option value="enterprise">All Departments (Enterprise)</option>
-          <option value="technology">Technology ($453 Avg Ticket)</option>
-          <option value="furniture">Furniture (High Bulk / Freight)</option>
-          <option value="office">Office Supplies (60% Order Vol)</option>
-        </select>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    
+    <!-- Top Hero Header -->
+    <header class="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 border border-indigo-500/30 rounded-2xl p-6 mb-8 shadow-2xl">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-2">
+        <span class="text-xs font-bold tracking-wider uppercase px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 rounded-full">
+          Machine Learning Task 2 • Future Interns
+        </span>
+        <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Live Decision-Support API Connected
+        </span>
       </div>
-
-      <div>
-        <div class="flex justify-between">
-          <label class="text-xs font-semibold text-[var(--muted-foreground)] uppercase">Lead Time</label>
-          <span id="leadTimeVal" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">2 Weeks</span>
-        </div>
-        <input id="leadTimeSlider" type="range" min="1" max="6" value="2" oninput="updateDashboard()" class="w-full mt-3 accent-indigo-600">
-      </div>
-
-      <div>
-        <div class="flex justify-between">
-          <label class="text-xs font-semibold text-[var(--muted-foreground)] uppercase">Service Level SLA</label>
-          <span id="serviceVal" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">95% SLA</span>
-        </div>
-        <input id="serviceSlider" type="range" min="90" max="99" value="95" step="1" oninput="updateDashboard()" class="w-full mt-3 accent-indigo-600">
-      </div>
-
-      <div>
-        <div class="flex justify-between">
-          <label class="text-xs font-semibold text-[var(--muted-foreground)] uppercase">Promotional Uplift</label>
-          <span id="promoVal" class="text-xs font-bold text-emerald-600 dark:text-emerald-400">0%</span>
-        </div>
-        <input id="promoSlider" type="range" min="-20" max="40" value="0" step="5" oninput="updateDashboard()" class="w-full mt-3 accent-emerald-600">
-      </div>
-    </div>
-
-    <!-- Reactive KPI Row -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm relative overflow-hidden">
-        <div class="absolute top-0 left-0 right-0 h-1 bg-emerald-500"></div>
-        <div class="text-xs font-medium text-[var(--muted-foreground)] uppercase">12-Wk Projected Revenue</div>
-        <div id="kpiRevenue" class="text-2xl font-bold mt-1 text-[var(--foreground)]">$128,538</div>
-        <div class="inline-flex text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mt-2 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">+14.4% vs Last Year</div>
-      </div>
-
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm relative overflow-hidden">
-        <div class="absolute top-0 left-0 right-0 h-1 bg-blue-500"></div>
-        <div class="text-xs font-medium text-[var(--muted-foreground)] uppercase">Weekly Operating Run-Rate</div>
-        <div id="kpiRunRate" class="text-2xl font-bold mt-1 text-[var(--foreground)]">$10,712/wk</div>
-        <div class="inline-flex text-[11px] font-semibold text-blue-600 dark:text-blue-400 mt-2 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded">Peak: $14,687</div>
-      </div>
-
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm relative overflow-hidden">
-        <div class="absolute top-0 left-0 right-0 h-1 bg-purple-500"></div>
-        <div class="text-xs font-medium text-[var(--muted-foreground)] uppercase">Required Safety Stock</div>
-        <div id="kpiSafetyStock" class="text-2xl font-bold mt-1 text-[var(--foreground)]">$3,459</div>
-        <div id="kpiServiceTag" class="inline-flex text-[11px] font-semibold text-purple-600 dark:text-purple-400 mt-2 bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded">95% Stockout Shield</div>
-      </div>
-
-      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm relative overflow-hidden">
-        <div class="absolute top-0 left-0 right-0 h-1 bg-amber-500"></div>
-        <div class="text-xs font-medium text-[var(--muted-foreground)] uppercase">Target Reorder Point (ROP)</div>
-        <div id="kpiReorderPoint" class="text-2xl font-bold mt-1 text-[var(--foreground)]">$24,883</div>
-        <div class="inline-flex text-[11px] font-semibold text-amber-600 dark:text-amber-400 mt-2 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded">Supplier Trigger</div>
-      </div>
-    </div>
-
-    <!-- Chart Card -->
-    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-3">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-base font-bold text-[var(--foreground)]">Demand Trajectory & Forward Uncertainty Ribbon</h2>
-          <p class="text-xs text-[var(--muted-foreground)]">Solid line: ML Model Forecast. Shaded envelope: 80% and 95% Confidence Bounds.</p>
-        </div>
-        <div class="flex items-center gap-3 text-xs font-medium">
-          <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-slate-500"></span> History</span>
-          <span class="flex items-center gap-1.5"><span class="w-3 h-1 bg-indigo-600"></span> Forecast</span>
-          <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-indigo-400/25 rounded-sm"></span> Confidence Band</span>
-        </div>
-      </div>
-
-      <!-- SVG Canvas Chart -->
-      <div class="w-full bg-[var(--background)] border border-[var(--border)] rounded-xl p-4 overflow-hidden">
-        <svg id="forecastSvg" viewBox="0 0 900 320" class="w-full h-64"></svg>
-      </div>
-    </div>
-
-    <!-- Inventory Decision Rule Callout -->
-    <div class="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl p-5 text-emerald-900 dark:text-emerald-200 text-sm leading-relaxed">
-      <div class="font-bold text-emerald-800 dark:text-emerald-300 text-base mb-1">📋 Actionable Warehouse & Store Manager Policy:</div>
-      <p id="policyText">
-        Trigger a supplier replenishment order immediately whenever stock on hand + incoming shipments drops below <b>$24,883</b>. Keep a <b>$3,459</b> dedicated buffer to maintain a <b>95% on-time fulfillment SLA</b> across your <b>2-week supplier lead time</b>.
+      <h1 class="text-3xl font-extrabold text-white tracking-tight">Support Ticket Classification & Prioritization</h1>
+      <p class="text-slate-400 mt-2 text-sm max-w-3xl">
+        Automated multi-class topic classification, class-balanced urgency prioritization, and deterministic zero-SLA-breach guardrails for modern SaaS customer support teams.
       </p>
-    </div>
+    </header>
 
-    <!-- Model Accuracy Benchmark Table -->
-    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm">
-      <h3 class="text-sm font-bold text-[var(--foreground)] uppercase mb-3 tracking-wide">🏆 Model Accuracy Tournament (Out-of-Sample Test)</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-xs text-left">
-          <thead class="text-[var(--muted-foreground)] uppercase border-b border-[var(--border)] bg-[var(--background)]">
-            <tr>
-              <th class="py-2.5 px-3">Model Architecture</th>
-              <th class="py-2.5 px-3">MAE ($)</th>
-              <th class="py-2.5 px-3">RMSE ($)</th>
-              <th class="py-2.5 px-3">WAPE (%)</th>
-              <th class="py-2.5 px-3">R² Score</th>
-              <th class="py-2.5 px-3">Status</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-[var(--border)] text-[var(--foreground)] font-medium">
-            <tr class="bg-indigo-50/50 dark:bg-indigo-950/20 font-bold">
-              <td class="py-2.5 px-3 text-indigo-600 dark:text-indigo-400">Random Forest Regressor</td>
-              <td class="py-2.5 px-3">$5,434.99</td>
-              <td class="py-2.5 px-3">$7,087.59</td>
-              <td class="py-2.5 px-3">30.16%</td>
-              <td class="py-2.5 px-3">0.286</td>
-              <td class="py-2.5 px-3"><span class="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[11px]">Champion (-21.5% Error)</span></td>
-            </tr>
-            <tr>
-              <td class="py-2.5 px-3">Weighted Ensemble (RF + XGB + Ridge)</td>
-              <td class="py-2.5 px-3">$5,467.76</td>
-              <td class="py-2.5 px-3">$7,088.33</td>
-              <td class="py-2.5 px-3">30.34%</td>
-              <td class="py-2.5 px-3">0.285</td>
-              <td class="py-2.5 px-3"><span class="text-slate-500">Runner Up</span></td>
-            </tr>
-            <tr>
-              <td class="py-2.5 px-3">XGBoost Regressor</td>
-              <td class="py-2.5 px-3">$5,518.80</td>
-              <td class="py-2.5 px-3">$7,156.57</td>
-              <td class="py-2.5 px-3">30.63%</td>
-              <td class="py-2.5 px-3">0.272</td>
-              <td class="py-2.5 px-3"><span class="text-slate-500">Solid Gradient Boost</span></td>
-            </tr>
-            <tr>
-              <td class="py-2.5 px-3">Ridge Regression (L2)</td>
-              <td class="py-2.5 px-3">$5,882.62</td>
-              <td class="py-2.5 px-3">$7,127.55</td>
-              <td class="py-2.5 px-3">32.64%</td>
-              <td class="py-2.5 px-3">0.277</td>
-              <td class="py-2.5 px-3"><span class="text-slate-500">Linear Baseline</span></td>
-            </tr>
-            <tr class="text-rose-600 dark:text-rose-400">
-              <td class="py-2.5 px-3">Seasonal Naive Baseline (Lag 52)</td>
-              <td class="py-2.5 px-3">$6,920.24</td>
-              <td class="py-2.5 px-3">$9,511.79</td>
-              <td class="py-2.5 px-3">38.40%</td>
-              <td class="py-2.5 px-3">-0.287</td>
-              <td class="py-2.5 px-3"><span class="bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 px-2 py-0.5 rounded text-[11px]">Unoptimized</span></td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Input Column (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg">
+          <h2 class="text-lg font-semibold text-white mb-3">Quick Scenario Presets</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-6">
+            <button onclick="loadScenario('outage')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
+              <span class="text-rose-400 font-bold block mb-1">🚨 Outage (P0)</span>
+              <span class="text-slate-400 text-[11px]">Database 500 timeout</span>
+            </button>
+            <button onclick="loadScenario('fraud')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
+              <span class="text-amber-400 font-bold block mb-1">💳 Billing Fraud</span>
+              <span class="text-slate-400 text-[11px]">Unauthorized charge</span>
+            </button>
+            <button onclick="loadScenario('sso')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
+              <span class="text-blue-400 font-bold block mb-1">🔐 SSO Lockout</span>
+              <span class="text-slate-400 text-[11px]">Okta cert expired</span>
+            </button>
+            <button onclick="loadScenario('feature')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
+              <span class="text-emerald-400 font-bold block mb-1">💡 Feature Suggestion</span>
+              <span class="text-slate-400 text-[11px]">Dark mode roadmap</span>
+            </button>
+            <button onclick="loadScenario('audit')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
+              <span class="text-purple-400 font-bold block mb-1">⚖️ HIPAA / GDPR</span>
+              <span class="text-slate-400 text-[11px]">Compliance audit</span>
+            </button>
+            <button onclick="clearForm()" class="text-left text-xs bg-slate-850 hover:bg-slate-800 p-2.5 rounded-lg border border-slate-700/50 transition">
+              <span class="text-slate-300 font-bold block mb-1">✏️ Custom Ticket</span>
+              <span class="text-slate-500 text-[11px]">Blank input</span>
+            </button>
+          </div>
+
+          <form id="ticketForm" onsubmit="handleTriage(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Ticket Subject</label>
+              <input type="text" id="subjectInput" required
+                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition"
+                placeholder="e.g. CRITICAL: Database connection timeout in production">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Ticket Body</label>
+              <textarea id="bodyInput" rows="5" required
+                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition"
+                placeholder="e.g. All API endpoints are returning 500 error since 10:00 AM UTC. Checkout is completely offline."></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn"
+              class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-indigo-500/25 transition flex items-center justify-center gap-2">
+              <span>🚀 Classify & Prioritize Ticket</span>
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
 
+      <!-- Output Column (5 cols) -->
+      <div class="lg:col-span-5 space-y-6">
+        <div id="resultBox" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg min-h-[460px] flex flex-col justify-between">
+          
+          <div>
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
+              <h2 class="text-lg font-semibold text-white">Decision-Support Output</h2>
+              <span id="timestampBadge" class="text-xs text-slate-500 font-mono">Ready</span>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="py-16 text-center text-slate-500">
+              <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <p class="text-sm">Click a preset scenario or submit a ticket to generate real-time classification.</p>
+            </div>
+
+            <!-- Populated State -->
+            <div id="populatedState" class="hidden space-y-4">
+              
+              <!-- Guardrail Alert -->
+              <div id="guardrailBanner" class="hidden p-3.5 bg-rose-500/15 border border-rose-500/40 rounded-lg text-rose-300 text-xs">
+                <div class="font-bold flex items-center gap-1.5 mb-1 text-rose-400">
+                  <span>🚨 SLA BREACH GUARDRAIL TRIGGERED</span>
+                </div>
+                <span>Matched acute risk rule: <strong id="matchedRule" class="font-mono text-white"></strong>. Escalated automatically to HIGH.</span>
+              </div>
+
+              <!-- Main Badges -->
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl">
+                  <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Category</div>
+                  <div id="catBadge" class="text-lg font-bold text-indigo-400">--</div>
+                  <div class="mt-2 text-xs text-slate-500">Confidence: <span id="catConf" class="text-slate-300 font-semibold">--</span></div>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl">
+                  <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Priority Tier</div>
+                  <div id="priBadge" class="text-lg font-bold">--</div>
+                  <div class="mt-2 text-xs text-slate-500">Confidence: <span id="priConf" class="text-slate-300 font-semibold">--</span></div>
+                </div>
+              </div>
+
+              <!-- Queue Recommendation -->
+              <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl">
+                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Recommended Specialist Queue</div>
+                <div id="queueText" class="text-sm font-semibold text-slate-200">--</div>
+              </div>
+
+              <!-- Action Status -->
+              <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl">
+                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Supervisory Status</div>
+                <div id="auditStatus" class="text-xs font-medium">--</div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-800 text-[11px] text-slate-500 flex justify-between">
+            <span>Model: Logistic Regression + TF-IDF (1, 2)</span>
+            <span>Latency: &lt; 5ms</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <script>
-    const deptScales = {
-      enterprise: 1.0,
-      technology: 0.364,
-      furniture: 0.323,
-      office: 0.313
+    const scenarios = {
+      outage: {
+        subject: "CRITICAL: Database connection timeout in US-East cluster",
+        body: "All API endpoints are returning HTTP 500 error since 10:00 AM UTC. Customer checkout is completely offline!"
+      },
+      fraud: {
+        subject: "Unauthorized charge on Visa corporate card ending 9821",
+        body: "We noticed an unauthorized charge of $1,250 on our statement for invoice INV-48211. Reverse this charge immediately."
+      },
+      sso: {
+        subject: "SAML SSO integration failing for entire organization",
+        body: "Our Okta certificate expired this morning. 300 employees are completely locked out of the company dashboard."
+      },
+      feature: {
+        subject: "Feature request: native dark mode for desktop client",
+        body: "Could the design team please consider adding a dark mode toggle option in the upcoming Q4 product roadmap?"
+      },
+      audit: {
+        subject: "Urgent compliance inquiry for impending HIPAA audit",
+        body: "We have an official regulatory audit tomorrow morning. We urgently need your signed BAA and SOC2 Type II report."
+      }
     };
 
-    const baseForecast = [
-      10087, 10010, 10005, 10051, 9934, 9175, 9735, 10306, 10892, 12044, 11613, 14687
-    ];
-    const baseHistory = [
-      8800, 9400, 10200, 9100, 8900, 11500, 13200, 10800, 12100, 14200, 13800, 12900
-    ];
-
-    function updateDashboard() {
-      const dept = document.getElementById("deptSelect").value;
-      const leadTime = parseInt(document.getElementById("leadTimeSlider").value);
-      const serviceLevel = parseInt(document.getElementById("serviceSlider").value);
-      const promoUplift = parseInt(document.getElementById("promoSlider").value);
-
-      document.getElementById("leadTimeVal").innerText = leadTime + (leadTime === 1 ? " Week" : " Weeks");
-      document.getElementById("serviceVal").innerText = serviceLevel + "% SLA";
-      document.getElementById("promoVal").innerText = (promoUplift >= 0 ? "+" : "") + promoUplift + "%";
-
-      const scale = deptScales[dept] * (1 + promoUplift / 100.0);
-
-      // Calculations
-      const adjustedForecast = baseForecast.map(v => v * scale);
-      const totalRev = adjustedForecast.reduce((a, b) => a + b, 0);
-      const avgWeekly = totalRev / adjustedForecast.length;
-
-      // Z-scores
-      const zMap = {90: 1.282, 91: 1.341, 92: 1.405, 93: 1.476, 94: 1.555, 95: 1.645, 96: 1.751, 97: 1.881, 98: 2.054, 99: 2.326};
-      const z = zMap[serviceLevel] || 1.645;
-      const sigma = avgWeekly * 0.228;
-
-      const leadTimeDemand = avgWeekly * leadTime;
-      const safetyStock = z * sigma * Math.sqrt(leadTime);
-      const reorderPoint = leadTimeDemand + safetyStock;
-
-      // Update KPIs
-      document.getElementById("kpiRevenue").innerText = "$" + Math.round(totalRev).toLocaleString();
-      document.getElementById("kpiRunRate").innerText = "$" + Math.round(avgWeekly).toLocaleString() + "/wk";
-      document.getElementById("kpiSafetyStock").innerText = "$" + Math.round(safetyStock).toLocaleString();
-      document.getElementById("kpiReorderPoint").innerText = "$" + Math.round(reorderPoint).toLocaleString();
-      document.getElementById("kpiServiceTag").innerText = serviceLevel + "% Stockout Shield";
-
-      // Policy Text
-      document.getElementById("policyText").innerHTML =
-        `Trigger a replenishment purchase order whenever inventory on hand + incoming shipments drops below <b>$${Math.round(reorderPoint).toLocaleString()}</b>. Keep a <b>$${Math.round(safetyStock).toLocaleString()}</b> reserved safety stock to guarantee a <b>${serviceLevel}% on-time fulfillment SLA</b> across your <b>${leadTime}-week supplier lead time</b>.`;
-
-      // Render SVG Chart
-      renderChart(baseHistory.map(v => v * deptScales[dept]), adjustedForecast, sigma);
+    function loadScenario(key) {
+      const sc = scenarios[key];
+      if (sc) {
+        document.getElementById('subjectInput').value = sc.subject;
+        document.getElementById('bodyInput').value = sc.body;
+        handleTriage(new Event('submit'));
+      }
     }
 
-    function renderChart(history, forecast, sigma) {
-      const svg = document.getElementById("forecastSvg");
-      const W = 900;
-      const H = 320;
-      const padL = 60, padR = 40, padT = 30, padB = 40;
-
-      const allVals = [...history, ...forecast];
-      const maxVal = Math.max(...allVals) * 1.35;
-      const minVal = 0;
-
-      const totalPts = history.length + forecast.length;
-      const stepX = (W - padL - padR) / (totalPts - 1);
-
-      function getY(val) {
-        return H - padB - ((val - minVal) / (maxVal - minVal)) * (H - padT - padB);
-      }
-      function getX(i) {
-        return padL + i * stepX;
-      }
-
-      // Build History path
-      let histPath = "";
-      history.forEach((val, i) => {
-        histPath += (i === 0 ? "M " : " L ") + getX(i) + " " + getY(val);
-      });
-
-      // Build Confidence Bands
-      const startForecastIdx = history.length;
-      let upperBand = [];
-      let lowerBand = [];
-      let forecastPath = "M " + getX(history.length - 1) + " " + getY(history[history.length - 1]);
-
-      forecast.forEach((val, step) => {
-        const idx = startForecastIdx + step;
-        const x = getX(idx);
-        const y = getY(val);
-        const bandH = (sigma * Math.sqrt(1 + 0.08 * step)) * 1.645;
-        const yUpper = getY(val + bandH);
-        const yLower = getY(Math.max(0, val - bandH));
-
-        forecastPath += " L " + x + " " + y;
-        upperBand.push(`${x},${yUpper}`);
-        lowerBand.unshift(`${x},${yLower}`);
-      });
-
-      const bandPolygon = upperBand.join(" ") + " " + lowerBand.join(" ");
-
-      let gridLines = "";
-      for (let g = 0; g <= 4; g++) {
-        const gVal = minVal + (maxVal / 4) * g;
-        const gY = getY(gVal);
-        gridLines += `<line x1="${padL}" y1="${gY}" x2="${W - padR}" y2="${gY}" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3" />`;
-        gridLines += `<text x="${padL - 10}" y="${gY + 4}" font-size="11" fill="#94a3b8" text-anchor="end">$${Math.round(gVal/1000)}k</text>`;
-      }
-
-      svg.innerHTML = `
-        ${gridLines}
-        <!-- Confidence Band -->
-        <polygon points="${bandPolygon}" fill="rgba(99, 102, 241, 0.18)" />
-        <!-- History Line -->
-        <path d="${histPath}" fill="none" stroke="#64748b" stroke-width="2.5" />
-        <!-- Forecast Line -->
-        <path d="${forecastPath}" fill="none" stroke="#4f46e5" stroke-width="3.5" />
-        <!-- Transition Divider -->
-        <line x1="${getX(startForecastIdx - 1)}" y1="${padT}" x2="${getX(startForecastIdx - 1)}" y2="${H - padB}" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,4" />
-        <text x="${getX(startForecastIdx - 1) + 8}" y="${padT + 14}" font-size="11" font-weight="700" fill="#4f46e5">Forecast Horizon ➔</text>
-      `;
+    function clearForm() {
+      document.getElementById('subjectInput').value = '';
+      document.getElementById('bodyInput').value = '';
+      document.getElementById('subjectInput').focus();
     }
 
-    // Init
-    updateDashboard();
+    async function handleTriage(e) {
+      if (e) e.preventDefault();
+      const subject = document.getElementById('subjectInput').value.trim();
+      const body = document.getElementById('bodyInput').value.trim();
+      if (!subject && !body) return;
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>⚡ Processing Semantics...</span>';
+
+      try {
+        const response = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticket_subject: subject, ticket_body: body })
+        });
+        const data = await response.json();
+
+        document.getElementById('emptyState').classList.add('hidden');
+        document.getElementById('populatedState').classList.remove('hidden');
+        document.getElementById('timestampBadge').innerText = new Date().toLocaleTimeString();
+
+        // Populate Category
+        document.getElementById('catBadge').innerText = data.predicted_category;
+        document.getElementById('catConf').innerText = `${(data.category_confidence * 100).toFixed(1)}%`;
+
+        // Populate Priority
+        const priEl = document.getElementById('priBadge');
+        priEl.innerText = `${data.predicted_priority} Urgency`;
+        if (data.predicted_priority === 'High') {
+          priEl.className = 'text-lg font-bold text-rose-400';
+        } else if (data.predicted_priority === 'Medium') {
+          priEl.className = 'text-lg font-bold text-amber-400';
+        } else {
+          priEl.className = 'text-lg font-bold text-emerald-400';
+        }
+        document.getElementById('priConf').innerText = `${(data.priority_confidence * 100).toFixed(1)}%`;
+
+        // SLA Guardrail
+        const banner = document.getElementById('guardrailBanner');
+        if (data.sla_guardrail_override) {
+          banner.classList.remove('hidden');
+          document.getElementById('matchedRule').innerText = data.matched_guardrail_rule;
+        } else {
+          banner.classList.add('hidden');
+        }
+
+        // Recommended Queue
+        document.getElementById('queueText').innerText = data.recommended_queue;
+
+        // Audit status
+        const auditEl = document.getElementById('auditStatus');
+        if (data.human_triage_recommended) {
+          auditEl.innerHTML = '<span class="text-amber-400 font-semibold">⚠️ Human Supervisor Review Required</span> (Confidence below threshold or SLA alert active)';
+        } else {
+          auditEl.innerHTML = '<span class="text-emerald-400 font-semibold">✅ Autonomous Direct Dispatch Approved</span>';
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert('Triage request failed. Check server console.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>🚀 Classify & Prioritize Ticket</span>';
+      }
+    }
+
+    // Auto-load scenario on first arrival
+    window.addEventListener('DOMContentLoaded', () => loadScenario('outage'));
   </script>
 </body>
 </html>
