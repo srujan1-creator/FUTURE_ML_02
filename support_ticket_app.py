@@ -440,41 +440,53 @@ with tab_triage:
     st.subheader("Interactive Support Ticket Triage Simulator")
     st.write("Click a quick preset scenario below to automatically populate the ticket and run triage:")
 
-    # Quick Preset Buttons in 5 Columns
-    p_cols = st.columns(5)
-    for idx, (p_name, p_val) in enumerate(PRESETS.items()):
-        if p_cols[idx].button(p_name, key=f"btn_p_{idx}"):
-            st.session_state['input_subj'] = p_val['subj']
-            st.session_state['input_body'] = p_val['body']
-            st.session_state['run_now'] = True
+# Helper to change preset and immediately re-evaluate
+def select_preset(preset_name):
+    p = PRESETS[preset_name]
+    st.session_state['text_subj'] = p['subj']
+    st.session_state['text_body'] = p['body']
+    st.session_state['last_res'] = execute_prediction(p['subj'], p['body'])
 
-    # Default session state initialization
-    if 'input_subj' not in st.session_state:
-        st.session_state['input_subj'] = "CRITICAL: Database connection timeout in production cluster"
-    if 'input_body' not in st.session_state:
-        st.session_state['input_body'] = "All API endpoints are returning HTTP 500 error since 10:00 AM UTC. Customer checkout is completely offline!"
+# Initialize session state keys once
+if 'text_subj' not in st.session_state:
+    st.session_state['text_subj'] = PRESETS["🔴 Critical Outage (P0)"]["subj"]
+if 'text_body' not in st.session_state:
+    st.session_state['text_body'] = PRESETS["🔴 Critical Outage (P0)"]["body"]
+if 'last_res' not in st.session_state:
+    st.session_state['last_res'] = execute_prediction(
+        st.session_state['text_subj'], st.session_state['text_body']
+    )
 
-    st.markdown("---")
-    
-    # Direct reactive text inputs (NO FORM BLOCKING)
-    col_t1, col_t2 = st.columns([1, 1])
-    with col_t1:
-        subj_text = st.text_input("Ticket Subject", value=st.session_state['input_subj'], key="text_subj")
-    with col_t2:
-        st.write("")
-        st.caption("💡 Tip: Type or paste any support ticket text. Try typing keywords like '500 error', 'refund', '2FA', or 'dark mode'.")
-        
-    body_text = st.text_area("Ticket Body", value=st.session_state['input_body'], height=110, key="text_body")
+# Quick Preset Buttons in 5 Columns
+p_cols = st.columns(5)
+for idx, p_name in enumerate(PRESETS.keys()):
+    p_cols[idx].button(
+        p_name,
+        key=f"btn_p_{idx}",
+        on_click=select_preset,
+        args=(p_name,),
+        use_container_width=True
+    )
 
-    trigger_classify = st.button("🚀 Classify & Prioritize Ticket", type="primary", key="main_classify_btn")
+st.markdown("---")
 
-    # Run prediction if user clicked button OR clicked a preset
-    if trigger_classify or st.session_state.get('run_now', False):
-        st.session_state['run_now'] = False
-        
-        with st.spinner("Analyzing semantics and checking SLA guardrails..."):
-            res = execute_prediction(subj_text, body_text)
-            st.session_state['last_res'] = res
+# Direct reactive text inputs tied to session state keys
+col_t1, col_t2 = st.columns([1, 1])
+with col_t1:
+    subj_text = st.text_input("Ticket Subject", key="text_subj")
+with col_t2:
+    st.write("")
+    st.caption("💡 Tip: Type or paste any support ticket text, or click any preset above to test different departments.")
+
+body_text = st.text_area("Ticket Body", height=110, key="text_body")
+
+trigger_classify = st.button("🚀 Classify & Prioritize Ticket", type="primary", key="main_classify_btn", use_container_width=True)
+
+# Run prediction if user clicked the classify button or modified text
+if trigger_classify:
+    with st.spinner("Analyzing semantics and checking SLA guardrails..."):
+        res = execute_prediction(st.session_state['text_subj'], st.session_state['text_body'])
+        st.session_state['last_res'] = res
 
     # Display results if available
     if 'last_res' in st.session_state:
