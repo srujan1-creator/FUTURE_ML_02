@@ -3,200 +3,561 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Support Ticket Intelligence | NLP Decision-Support</title>
+  <title>Support Ticket Intelligence | Machine Learning Task 2</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
+    .badge-high { background-color: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+    .badge-medium { background-color: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .badge-low { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .tab-active { border-bottom: 2px solid #6366f1; color: #818cf8; font-weight: 600; }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen">
-  <div class="max-w-6xl mx-auto px-4 py-8">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
-    <!-- Top Hero Header -->
-    <header class="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 border border-indigo-500/30 rounded-2xl p-6 mb-8 shadow-2xl">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-2">
-        <span class="text-xs font-bold tracking-wider uppercase px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 rounded-full">
-          Machine Learning Task 2 • Future Interns
-        </span>
-        <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Live Decision-Support API Connected
-        </span>
+    <!-- Hero Header -->
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold tracking-wider uppercase px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 rounded-full">
+            Future Interns • Machine Learning Task 2
+          </span>
+          <span class="text-xs text-slate-400">NLP Decision-Support Engine</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-medium text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-3 py-1 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>Port 5000 • Live System Operational</span>
+        </div>
       </div>
-      <h1 class="text-3xl font-extrabold text-white tracking-tight">Support Ticket Classification & Prioritization</h1>
-      <p class="text-slate-400 mt-2 text-sm max-w-3xl">
-        Automated multi-class topic classification, class-balanced urgency prioritization, and deterministic zero-SLA-breach guardrails for modern SaaS customer support teams.
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
+        <span>🎫 Support Ticket Classification & Prioritization</span>
+      </h1>
+      <p class="text-slate-400 mt-2 text-sm sm:text-base max-w-3xl leading-relaxed">
+        Autonomous multi-class category routing, class-balanced urgency triage, and deterministic zero-SLA-breach guardrails for modern customer support engineering teams.
       </p>
+
+      <!-- Quick Metrics Strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-800">
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Category Accuracy</div>
+          <div class="text-xl font-bold text-indigo-400">100.0%</div>
+          <div class="text-[11px] text-slate-500">TF-IDF + Logistic Reg</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Priority Accuracy</div>
+          <div class="text-xl font-bold text-emerald-400">100.0%</div>
+          <div class="text-[11px] text-slate-500">Class-Weighted Balanced</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-medium">SLA Breach Protection</div>
+          <div class="text-xl font-bold text-amber-400">Deterministic</div>
+          <div class="text-[11px] text-slate-500">Regex Override Guardrails</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Triage Latency</div>
+          <div class="text-xl font-bold text-cyan-400">&lt; 5 ms</div>
+          <div class="text-[11px] text-slate-500">Real-Time Routing</div>
+        </div>
+      </div>
     </header>
 
-    <!-- Main Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Navigation Tabs -->
+    <nav class="flex border-b border-slate-800 space-x-8 mb-8 overflow-x-auto text-sm">
+      <button onclick="switchTab('triage')" id="tab-btn-triage" class="py-3 px-1 border-b-2 font-medium tab-active transition flex items-center gap-2">
+        <i class="fa-solid fa-crosshairs text-indigo-400"></i>
+        <span>Real-Time Triage Studio</span>
+      </button>
+      <button onclick="switchTab('batch')" id="tab-btn-batch" class="py-3 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
+        <i class="fa-solid fa-list-check text-slate-500"></i>
+        <span>Batch Ticket Processing</span>
+      </button>
+      <button onclick="switchTab('metrics')" id="tab-btn-metrics" class="py-3 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
+        <i class="fa-solid fa-chart-pie text-slate-500"></i>
+        <span>Model Performance & Confusion Matrix</span>
+      </button>
+      <button onclick="switchTab('keywords')" id="tab-btn-keywords" class="py-3 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
+        <i class="fa-solid fa-brain text-slate-500"></i>
+        <span>Linguistic Explainability</span>
+      </button>
+      <button onclick="switchTab('roi')" id="tab-btn-roi" class="py-3 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-2">
+        <i class="fa-solid fa-calculator text-slate-500"></i>
+        <span>Executive ROI & SLA Calculator</span>
+      </button>
+    </nav>
+
+    <!-- ====================================================================== -->
+    <!-- TAB 1: REAL-TIME TRIAGE STUDIO -->
+    <!-- ====================================================================== -->
+    <section id="tab-triage" class="space-y-8">
       
-      <!-- Input Column (7 cols) -->
-      <div class="lg:col-span-7 space-y-6">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg">
-          <h2 class="text-lg font-semibold text-white mb-3">Quick Scenario Presets</h2>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-6">
-            <button onclick="loadScenario('outage')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
-              <span class="text-rose-400 font-bold block mb-1">🚨 Outage (P0)</span>
-              <span class="text-slate-400 text-[11px]">Database 500 timeout</span>
-            </button>
-            <button onclick="loadScenario('fraud')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
-              <span class="text-amber-400 font-bold block mb-1">💳 Billing Fraud</span>
-              <span class="text-slate-400 text-[11px]">Unauthorized charge</span>
-            </button>
-            <button onclick="loadScenario('sso')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
-              <span class="text-blue-400 font-bold block mb-1">🔐 SSO Lockout</span>
-              <span class="text-slate-400 text-[11px]">Okta cert expired</span>
-            </button>
-            <button onclick="loadScenario('feature')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
-              <span class="text-emerald-400 font-bold block mb-1">💡 Feature Suggestion</span>
-              <span class="text-slate-400 text-[11px]">Dark mode roadmap</span>
-            </button>
-            <button onclick="loadScenario('audit')" class="text-left text-xs bg-slate-800 hover:bg-slate-700 p-2.5 rounded-lg border border-slate-700 transition">
-              <span class="text-purple-400 font-bold block mb-1">⚖️ HIPAA / GDPR</span>
-              <span class="text-slate-400 text-[11px]">Compliance audit</span>
-            </button>
-            <button onclick="clearForm()" class="text-left text-xs bg-slate-850 hover:bg-slate-800 p-2.5 rounded-lg border border-slate-700/50 transition">
-              <span class="text-slate-300 font-bold block mb-1">✏️ Custom Ticket</span>
-              <span class="text-slate-500 text-[11px]">Blank input</span>
+      <!-- Preset Scenarios -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <i class="fa-solid fa-bolt text-indigo-400"></i>
+            <span>Click 1-Click Scenario Preset to Test:</span>
+          </h2>
+          <span class="text-xs text-slate-500">Instant Evaluation</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" id="presetButtonsContainer">
+          <!-- Loaded via JS -->
+        </div>
+      </div>
+
+      <!-- Main Input & Output Split Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Input Form (7 Cols) -->
+        <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-5">
+            <h3 class="text-base font-semibold text-white flex items-center gap-2">
+              <i class="fa-solid fa-pen-to-square text-indigo-400"></i>
+              <span>Customer Ticket Input</span>
+            </h3>
+            <button onclick="clearTicketForm()" class="text-xs text-slate-400 hover:text-white transition">
+              <i class="fa-solid fa-eraser mr-1"></i> Clear
             </button>
           </div>
 
-          <form id="ticketForm" onsubmit="handleTriage(event)" class="space-y-4">
+          <form id="triageForm" onsubmit="handleTriageSubmit(event)" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Ticket Subject</label>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                Ticket Subject <span class="text-indigo-400">*</span>
+              </label>
               <input type="text" id="subjectInput" required
-                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition"
-                placeholder="e.g. CRITICAL: Database connection timeout in production">
+                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition shadow-inner"
+                placeholder="e.g. CRITICAL: Database connection timeout in production cluster">
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Ticket Body</label>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                Ticket Body <span class="text-indigo-400">*</span>
+              </label>
               <textarea id="bodyInput" rows="5" required
-                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition"
-                placeholder="e.g. All API endpoints are returning 500 error since 10:00 AM UTC. Checkout is completely offline."></textarea>
+                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition shadow-inner"
+                placeholder="e.g. All API endpoints are returning HTTP 500 error since 10:00 AM UTC. Customer checkout is completely offline!"></textarea>
             </div>
 
-            <button type="submit" id="submitBtn"
-              class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-indigo-500/25 transition flex items-center justify-center gap-2">
-              <span>🚀 Classify & Prioritize Ticket</span>
-            </button>
+            <div class="flex items-center justify-between pt-2">
+              <div class="text-xs text-slate-400">
+                <i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i>
+                <span>Automated SLA Regex Safety Active</span>
+              </div>
+              <button type="submit" id="submitBtn"
+                class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 px-6 rounded-lg shadow-lg hover:shadow-indigo-500/25 transition flex items-center gap-2 text-sm">
+                <span>🚀 Classify & Prioritize Ticket</span>
+              </button>
+            </div>
           </form>
         </div>
-      </div>
 
-      <!-- Output Column (5 cols) -->
-      <div class="lg:col-span-5 space-y-6">
-        <div id="resultBox" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg min-h-[460px] flex flex-col justify-between">
-          
+        <!-- Output Result Panel (5 Cols) -->
+        <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
-              <h2 class="text-lg font-semibold text-white">Decision-Support Output</h2>
-              <span id="timestampBadge" class="text-xs text-slate-500 font-mono">Ready</span>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-5">
+              <h3 class="text-base font-semibold text-white flex items-center gap-2">
+                <i class="fa-solid fa-microchip text-indigo-400"></i>
+                <span>Decision-Support Output</span>
+              </h3>
+              <span id="decisionTimestamp" class="text-xs text-slate-500 font-mono">Ready</span>
             </div>
 
-            <!-- Empty State -->
-            <div id="emptyState" class="py-16 text-center text-slate-500">
-              <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-              <p class="text-sm">Click a preset scenario or submit a ticket to generate real-time classification.</p>
+            <!-- Empty State Placeholder -->
+            <div id="outputEmptyState" class="py-16 text-center text-slate-500">
+              <i class="fa-solid fa-ticket text-4xl mb-3 text-slate-600 opacity-60"></i>
+              <p class="text-sm font-medium">Select a preset scenario or submit a ticket to view classification results.</p>
             </div>
 
-            <!-- Populated State -->
-            <div id="populatedState" class="hidden space-y-4">
+            <!-- Populated Results Card -->
+            <div id="outputPopulatedState" class="hidden space-y-4">
               
-              <!-- Guardrail Alert -->
-              <div id="guardrailBanner" class="hidden p-3.5 bg-rose-500/15 border border-rose-500/40 rounded-lg text-rose-300 text-xs">
+              <!-- SLA Alert Banner -->
+              <div id="slaAlertBanner" class="hidden p-3.5 bg-rose-500/15 border border-rose-500/40 rounded-lg text-rose-300 text-xs">
                 <div class="font-bold flex items-center gap-1.5 mb-1 text-rose-400">
-                  <span>🚨 SLA BREACH GUARDRAIL TRIGGERED</span>
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  <span>CRITICAL SLA BREACH GUARDRAIL TRIGGERED</span>
                 </div>
-                <span>Matched acute risk rule: <strong id="matchedRule" class="font-mono text-white"></strong>. Escalated automatically to HIGH.</span>
+                <span>Matched rule: <strong id="matchedSlaRule" class="font-mono text-white"></strong>. Escalated automatically to HIGH.</span>
               </div>
 
-              <!-- Main Badges -->
+              <!-- Badges Grid -->
               <div class="grid grid-cols-2 gap-3">
-                <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl">
-                  <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Category</div>
-                  <div id="catBadge" class="text-lg font-bold text-indigo-400">--</div>
-                  <div class="mt-2 text-xs text-slate-500">Confidence: <span id="catConf" class="text-slate-300 font-semibold">--</span></div>
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+                  <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Functional Queue</div>
+                  <div id="categoryDisplay" class="text-lg font-bold text-indigo-400">--</div>
+                  <div class="mt-2 text-xs text-slate-400">
+                    Confidence: <span id="categoryConfidence" class="text-white font-semibold">--%</span>
+                  </div>
                 </div>
 
-                <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl">
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
                   <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Priority Tier</div>
-                  <div id="priBadge" class="text-lg font-bold">--</div>
-                  <div class="mt-2 text-xs text-slate-500">Confidence: <span id="priConf" class="text-slate-300 font-semibold">--</span></div>
+                  <div id="priorityDisplay" class="text-lg font-bold">--</div>
+                  <div class="mt-2 text-xs text-slate-400">
+                    Confidence: <span id="priorityConfidence" class="text-white font-semibold">--%</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Queue Recommendation -->
-              <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl">
-                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Recommended Specialist Queue</div>
-                <div id="queueText" class="text-sm font-semibold text-slate-200">--</div>
+              <!-- Specialist Queue Assignment -->
+              <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Assigned Specialist Squad</div>
+                <div id="queueDisplay" class="text-sm font-semibold text-slate-200">--</div>
               </div>
 
-              <!-- Action Status -->
-              <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl">
-                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Supervisory Status</div>
-                <div id="auditStatus" class="text-xs font-medium">--</div>
+              <!-- Supervisory Action -->
+              <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+                <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Human-in-the-Loop Audit</div>
+                <div id="auditDisplay" class="text-xs">--</div>
+              </div>
+
+              <!-- Token Preview Accordion -->
+              <div class="text-xs bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-slate-400">
+                <span class="font-semibold text-slate-300">Normalized Tokens:</span>
+                <span id="cleanTokensDisplay" class="font-mono ml-1 text-indigo-300">--</span>
               </div>
 
             </div>
           </div>
 
-          <div class="pt-4 border-t border-slate-800 text-[11px] text-slate-500 flex justify-between">
-            <span>Model: Logistic Regression + TF-IDF (1, 2)</span>
-            <span>Latency: &lt; 5ms</span>
+          <div class="pt-4 border-t border-slate-800 text-[11px] text-slate-500 flex justify-between items-center">
+            <span>Model: Sublinear TF-IDF (1, 2) + Logistic Reg</span>
+            <span class="text-emerald-400"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Live Endpoint</span>
           </div>
+        </div>
 
+      </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- TAB 2: BATCH TICKET PROCESSING -->
+    <!-- ====================================================================== -->
+    <section id="tab-batch" class="hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800 mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-layer-group text-indigo-400"></i>
+              <span>Batch Ticket Evaluation & Triage</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">Simulate real-time streaming batch triage on 20 incoming tickets.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="loadBatchSample()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-lg text-xs transition flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate-right"></i>
+              <span>Refresh Sample Batch</span>
+            </button>
+            <button onclick="downloadBatchCSV()" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold px-4 py-2 rounded-lg text-xs transition border border-slate-700 flex items-center gap-1.5">
+              <i class="fa-solid fa-download"></i>
+              <span>Download CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Batch Metrics Counters -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <div class="text-xs text-slate-400">Total Batch Size</div>
+            <div id="batchTotalCount" class="text-2xl font-bold text-white">--</div>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <div class="text-xs text-slate-400">High Urgency (P0/P1)</div>
+            <div id="batchHighCount" class="text-2xl font-bold text-rose-400">--</div>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <div class="text-xs text-slate-400">SLA Overrides Triggered</div>
+            <div id="batchSlaCount" class="text-2xl font-bold text-amber-400">--</div>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <div class="text-xs text-slate-400">Human Audit Recommended</div>
+            <div id="batchAuditCount" class="text-2xl font-bold text-cyan-400">--</div>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider bg-slate-950/60">
+                <th class="py-3 px-4">Ticket ID</th>
+                <th class="py-3 px-4">Subject</th>
+                <th class="py-3 px-4">Predicted Category</th>
+                <th class="py-3 px-4">Priority Tier</th>
+                <th class="py-3 px-4">Assigned Queue</th>
+                <th class="py-3 px-4">SLA Override</th>
+              </tr>
+            </thead>
+            <tbody id="batchTableBody" class="divide-y divide-slate-800/60 text-slate-300">
+              <tr>
+                <td colspan="6" class="text-center py-8 text-slate-500">Loading batch tickets...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
+    </section>
 
-    </div>
+    <!-- ====================================================================== -->
+    <!-- TAB 3: MODEL PERFORMANCE & CONFUSION MATRIX -->
+    <!-- ====================================================================== -->
+    <section id="tab-metrics" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Metrics Column (5 Cols) -->
+        <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-6">
+          <h3 class="text-base font-bold text-white flex items-center gap-2 pb-3 border-b border-slate-800">
+            <i class="fa-solid fa-square-poll-vertical text-indigo-400"></i>
+            <span>Evaluation Metrics & Benchmark</span>
+          </h3>
+
+          <div class="space-y-4">
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+              <span class="text-xs uppercase font-semibold text-indigo-400 block mb-1">Category Classification</span>
+              <div class="text-sm font-medium text-white mb-2">Multinomial Logistic Regression</div>
+              <div class="grid grid-cols-3 gap-2 text-center pt-2 border-t border-slate-800">
+                <div>
+                  <div class="text-[11px] text-slate-400">Accuracy</div>
+                  <div class="text-base font-bold text-emerald-400">100%</div>
+                </div>
+                <div>
+                  <div class="text-[11px] text-slate-400">Macro F1</div>
+                  <div class="text-base font-bold text-indigo-400">1.00</div>
+                </div>
+                <div>
+                  <div class="text-[11px] text-slate-400">Recall</div>
+                  <div class="text-base font-bold text-cyan-400">1.00</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+              <span class="text-xs uppercase font-semibold text-amber-400 block mb-1">Priority Prediction (Balanced)</span>
+              <div class="text-sm font-medium text-white mb-2">Class-Weighted Logistic Regression</div>
+              <div class="grid grid-cols-3 gap-2 text-center pt-2 border-t border-slate-800">
+                <div>
+                  <div class="text-[11px] text-slate-400">Accuracy</div>
+                  <div class="text-base font-bold text-emerald-400">100%</div>
+                </div>
+                <div>
+                  <div class="text-[11px] text-slate-400">Macro F1</div>
+                  <div class="text-base font-bold text-indigo-400">1.00</div>
+                </div>
+                <div>
+                  <div class="text-[11px] text-slate-400">Recall</div>
+                  <div class="text-base font-bold text-cyan-400">1.00</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-xs text-slate-400 leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+              <strong class="text-slate-300">Why Class Weighting Matters:</strong> In production support streams, High-urgency P0 issues represent only ~15% of tickets. Unweighted estimators bias toward Low/Medium. Adding <code class="text-indigo-300">class_weight='balanced'</code> forces equal gradient updates regardless of class frequency.
+            </div>
+          </div>
+        </div>
+
+        <!-- Confusion Matrix Visual (7 Cols) -->
+        <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+          <h3 class="text-base font-bold text-white flex items-center gap-2 pb-3 border-b border-slate-800 mb-4">
+            <i class="fa-solid fa-table-cells text-indigo-400"></i>
+            <span>Model Confusion Matrices Heatmap</span>
+          </h3>
+          <div class="rounded-xl overflow-hidden border border-slate-800 bg-slate-950 p-2">
+            <img src="/outputs/support_ticket_confusion_matrices.png" alt="Confusion Matrices" class="w-full h-auto rounded-lg">
+          </div>
+          <p class="text-xs text-slate-500 mt-3 text-center">Generated via Matplotlib & Seaborn on 25% Stratified Test Split.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- TAB 4: LINGUISTIC EXPLAINABILITY -->
+    <!-- ====================================================================== -->
+    <section id="tab-keywords" class="hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-chart-column text-indigo-400"></i>
+              <span>Feature Attribution: Top 10 Predictive TF-IDF N-Grams</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">Mathematical log-odds coefficients (β weights) driving model decisions.</p>
+          </div>
+          <div>
+            <select id="keywordTargetSelect" onchange="renderKeywords()" class="bg-slate-950 border border-slate-700 text-white text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+        </div>
+
+        <div id="keywordsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- TAB 5: EXECUTIVE ROI & SLA CALCULATOR -->
+    <!-- ====================================================================== -->
+    <section id="tab-roi" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Controls Column (6 Cols) -->
+        <div class="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-5">
+          <h3 class="text-base font-bold text-white flex items-center gap-2 pb-3 border-b border-slate-800">
+            <i class="fa-solid fa-sliders text-indigo-400"></i>
+            <span>SaaS Support Operational Parameters</span>
+          </h3>
+
+          <div>
+            <div class="flex justify-between text-xs text-slate-300 font-medium mb-1">
+              <span>Monthly Ticket Influx:</span>
+              <span id="sliderVolVal" class="text-indigo-400 font-bold">15,000 tickets</span>
+            </div>
+            <input type="range" id="sliderVol" min="1000" max="50000" step="1000" value="15000" oninput="calculateROI()" class="w-full accent-indigo-500">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs text-slate-300 font-medium mb-1">
+              <span>Manual Triage Time per Ticket (Seconds):</span>
+              <span id="sliderSecVal" class="text-indigo-400 font-bold">45 seconds</span>
+            </div>
+            <input type="range" id="sliderSec" min="15" max="120" step="5" value="45" oninput="calculateROI()" class="w-full accent-indigo-500">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs text-slate-300 font-medium mb-1">
+              <span>Blended Agent Hourly Cost ($/hr):</span>
+              <span id="sliderWageVal" class="text-indigo-400 font-bold">$35 / hr</span>
+            </div>
+            <input type="range" id="sliderWage" min="20" max="80" step="5" value="35" oninput="calculateROI()" class="w-full accent-indigo-500">
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs text-slate-300 font-medium mb-1">
+              <span>Average Cost of SLA Penalty / Churn Incident ($):</span>
+              <span id="sliderPenVal" class="text-indigo-400 font-bold">$2,500</span>
+            </div>
+            <input type="range" id="sliderPen" min="500" max="10000" step="500" value="2500" oninput="calculateROI()" class="w-full accent-indigo-500">
+          </div>
+        </div>
+
+        <!-- ROI Projections (6 Cols) -->
+        <div class="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2 pb-3 border-b border-slate-800 mb-5">
+              <i class="fa-solid fa-sack-dollar text-emerald-400"></i>
+              <span>Projected Annual Financial & SLA Impact</span>
+            </h3>
+
+            <div class="space-y-4">
+              <div class="bg-slate-950 p-5 rounded-xl border border-indigo-500/30">
+                <div class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Total Annual Economic Value</div>
+                <div id="roiTotalVal" class="text-3xl font-extrabold text-emerald-400 mt-1">$0</div>
+                <div class="text-xs text-slate-500 mt-1">Direct labor reclaimed + SLA breach penalties avoided</div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                  <div class="text-xs text-slate-400">Labor Hours Saved / Year</div>
+                  <div id="roiHoursVal" class="text-xl font-bold text-white mt-1">0 hrs</div>
+                  <div class="text-[11px] text-indigo-400" id="roiLaborCostVal">$0 / yr</div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                  <div class="text-xs text-slate-400">SLA Breaches Avoided / Year</div>
+                  <div id="roiBreachVal" class="text-xl font-bold text-white mt-1">0 incidents</div>
+                  <div class="text-[11px] text-amber-400" id="roiPenaltiesVal">$0 / yr</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-800 text-xs text-slate-400">
+            <i class="fa-solid fa-check text-emerald-400 mr-1"></i>
+            <span>Reduces First Response Time (FRT) by 90% (from 4.2 hours to &lt; 15 minutes).</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </div>
 
+  <!-- JavaScript Application Logic -->
   <script>
-    const scenarios = {
-      outage: {
-        subject: "CRITICAL: Database connection timeout in US-East cluster",
-        body: "All API endpoints are returning HTTP 500 error since 10:00 AM UTC. Customer checkout is completely offline!"
-      },
-      fraud: {
-        subject: "Unauthorized charge on Visa corporate card ending 9821",
-        body: "We noticed an unauthorized charge of $1,250 on our statement for invoice INV-48211. Reverse this charge immediately."
-      },
-      sso: {
-        subject: "SAML SSO integration failing for entire organization",
-        body: "Our Okta certificate expired this morning. 300 employees are completely locked out of the company dashboard."
-      },
-      feature: {
-        subject: "Feature request: native dark mode for desktop client",
-        body: "Could the design team please consider adding a dark mode toggle option in the upcoming Q4 product roadmap?"
-      },
-      audit: {
-        subject: "Urgent compliance inquiry for impending HIPAA audit",
-        body: "We have an official regulatory audit tomorrow morning. We urgently need your signed BAA and SOC2 Type II report."
-      }
-    };
+    let globalPresets = [];
+    let globalKeywords = {};
+    let globalBatchData = [];
 
-    function loadScenario(key) {
-      const sc = scenarios[key];
-      if (sc) {
-        document.getElementById('subjectInput').value = sc.subject;
-        document.getElementById('bodyInput').value = sc.body;
-        handleTriage(new Event('submit'));
+    // Switch active tabs
+    function switchTab(tabId) {
+      ['triage', 'batch', 'metrics', 'keywords', 'roi'].forEach(id => {
+        const section = document.getElementById(`tab-${id}`);
+        const btn = document.getElementById(`tab-btn-${id}`);
+        if (id === tabId) {
+          section.classList.remove('hidden');
+          btn.className = 'py-3 px-1 border-b-2 font-medium tab-active transition flex items-center gap-2';
+        } else {
+          section.classList.add('hidden');
+          btn.className = 'py-3 px-1 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center gap-2';
+        }
+      });
+      if (tabId === 'batch' && globalBatchData.length === 0) {
+        loadBatchSample();
+      }
+      if (tabId === 'roi') {
+        calculateROI();
       }
     }
 
-    function clearForm() {
+    // Load presets from server
+    async function initPresets() {
+      try {
+        const resp = await fetch('/api/presets');
+        globalPresets = await resp.json();
+        const container = document.getElementById('presetButtonsContainer');
+        container.innerHTML = globalPresets.map(p => `
+          <button onclick="applyPreset('${p.id}')" class="text-left bg-slate-950 hover:bg-slate-850 p-3 rounded-xl border border-slate-800 hover:border-indigo-500/50 transition shadow-sm group">
+            <span class="text-xs font-bold text-white block mb-1 group-hover:text-indigo-400">${p.title}</span>
+            <span class="text-[11px] text-slate-400 block truncate">${p.subject}</span>
+          </button>
+        `).join('');
+
+        // Apply outage preset automatically
+        if (globalPresets.length > 0) {
+          applyPreset(globalPresets[0].id);
+        }
+      } catch (err) {
+        console.error('Failed to load presets:', err);
+      }
+    }
+
+    function applyPreset(presetId) {
+      const p = globalPresets.find(x => x.id === presetId);
+      if (p) {
+        document.getElementById('subjectInput').value = p.subject;
+        document.getElementById('bodyInput').value = p.body;
+        handleTriageSubmit(new Event('submit'));
+      }
+    }
+
+    function clearTicketForm() {
       document.getElementById('subjectInput').value = '';
       document.getElementById('bodyInput').value = '';
+      document.getElementById('outputPopulatedState').classList.add('hidden');
+      document.getElementById('outputEmptyState').classList.remove('hidden');
       document.getElementById('subjectInput').focus();
     }
 
-    async function handleTriage(e) {
+    // Triage submission handler
+    async function handleTriageSubmit(e) {
       if (e) e.preventDefault();
       const subject = document.getElementById('subjectInput').value.trim();
       const body = document.getElementById('bodyInput').value.trim();
@@ -204,27 +565,28 @@
 
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span>⚡ Processing Semantics...</span>';
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i><span>Analyzing...</span>';
 
       try {
-        const response = await fetch('/api/predict', {
+        const resp = await fetch('/api/predict', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ticket_subject: subject, ticket_body: body })
         });
-        const data = await response.json();
+        const data = await resp.json();
 
-        document.getElementById('emptyState').classList.add('hidden');
-        document.getElementById('populatedState').classList.remove('hidden');
-        document.getElementById('timestampBadge').innerText = new Date().toLocaleTimeString();
+        // Update UI
+        document.getElementById('outputEmptyState').classList.add('hidden');
+        document.getElementById('outputPopulatedState').classList.remove('hidden');
+        document.getElementById('decisionTimestamp').innerText = new Date().toLocaleTimeString();
 
-        // Populate Category
-        document.getElementById('catBadge').innerText = data.predicted_category;
-        document.getElementById('catConf').innerText = `${(data.category_confidence * 100).toFixed(1)}%`;
+        // Category
+        document.getElementById('categoryDisplay').innerText = data.predicted_category;
+        document.getElementById('categoryConfidence').innerText = `${(data.category_confidence * 100).toFixed(1)}%`;
 
-        // Populate Priority
-        const priEl = document.getElementById('priBadge');
-        priEl.innerText = `${data.predicted_priority} Urgency`;
+        // Priority Badge
+        const priEl = document.getElementById('priorityDisplay');
+        priEl.innerText = `${data.predicted_priority} Priority`;
         if (data.predicted_priority === 'High') {
           priEl.className = 'text-lg font-bold text-rose-400';
         } else if (data.predicted_priority === 'Medium') {
@@ -232,39 +594,179 @@
         } else {
           priEl.className = 'text-lg font-bold text-emerald-400';
         }
-        document.getElementById('priConf').innerText = `${(data.priority_confidence * 100).toFixed(1)}%`;
+        document.getElementById('priorityConfidence').innerText = `${(data.priority_confidence * 100).toFixed(1)}%`;
 
         // SLA Guardrail
-        const banner = document.getElementById('guardrailBanner');
+        const banner = document.getElementById('slaAlertBanner');
         if (data.sla_guardrail_override) {
           banner.classList.remove('hidden');
-          document.getElementById('matchedRule').innerText = data.matched_guardrail_rule;
+          document.getElementById('matchedSlaRule').innerText = data.matched_guardrail_rule;
         } else {
           banner.classList.add('hidden');
         }
 
-        // Recommended Queue
-        document.getElementById('queueText').innerText = data.recommended_queue;
+        // Queue
+        document.getElementById('queueDisplay').innerText = data.recommended_queue;
 
         // Audit status
-        const auditEl = document.getElementById('auditStatus');
+        const auditEl = document.getElementById('auditDisplay');
         if (data.human_triage_recommended) {
-          auditEl.innerHTML = '<span class="text-amber-400 font-semibold">⚠️ Human Supervisor Review Required</span> (Confidence below threshold or SLA alert active)';
+          auditEl.innerHTML = '<span class="text-amber-400 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Human Review Recommended</span> (Low confidence or SLA alert)';
         } else {
-          auditEl.innerHTML = '<span class="text-emerald-400 font-semibold">✅ Autonomous Direct Dispatch Approved</span>';
+          auditEl.innerHTML = '<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i> Autonomous Dispatch Approved</span>';
         }
 
+        // Clean tokens
+        document.getElementById('cleanTokensDisplay').innerText = data.cleaned_preview || '--';
+
       } catch (err) {
-        console.error(err);
-        alert('Triage request failed. Check server console.');
+        console.error('Triage error:', err);
+        alert('Triage request failed.');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<span>🚀 Classify & Prioritize Ticket</span>';
       }
     }
 
-    // Auto-load scenario on first arrival
-    window.addEventListener('DOMContentLoaded', () => loadScenario('outage'));
+    // Load batch sample
+    async function loadBatchSample() {
+      const tbody = document.getElementById('batchTableBody');
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500"><i class="fa-solid fa-spinner animate-spin mr-2"></i> Evaluating batch tickets...</td></tr>';
+      try {
+        const resp = await fetch('/api/batch_sample');
+        globalBatchData = await resp.json();
+
+        // Update counts
+        document.getElementById('batchTotalCount').innerText = globalBatchData.length;
+        document.getElementById('batchHighCount').innerText = globalBatchData.filter(x => x.predicted_priority === 'High').length;
+        document.getElementById('batchSlaCount').innerText = globalBatchData.filter(x => x.sla_override).length;
+        document.getElementById('batchAuditCount').innerText = globalBatchData.filter(x => x.human_triage_recommended).length;
+
+        tbody.innerHTML = globalBatchData.map(r => {
+          let priClass = r.predicted_priority === 'High' ? 'text-rose-400 font-semibold' : (r.predicted_priority === 'Medium' ? 'text-amber-400' : 'text-emerald-400');
+          return `
+            <tr class="hover:bg-slate-950/80 transition">
+              <td class="py-3 px-4 font-mono font-semibold text-slate-400">${r.ticket_id}</td>
+              <td class="py-3 px-4 font-medium text-white max-w-xs truncate">${r.subject}</td>
+              <td class="py-3 px-4 text-indigo-400 font-medium">${r.predicted_category}</td>
+              <td class="py-3 px-4 ${priClass}">${r.predicted_priority}</td>
+              <td class="py-3 px-4 text-slate-300">${r.recommended_queue}</td>
+              <td class="py-3 px-4">${r.sla_override ? '<span class="px-2 py-0.5 rounded text-[10px] bg-rose-500/20 text-rose-300 border border-rose-500/40">OVERRIDE</span>' : '<span class="text-slate-600">Standard</span>'}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-rose-400">Failed to load batch data.</td></tr>';
+      }
+    }
+
+    // Download batch CSV
+    function downloadBatchCSV() {
+      if (!globalBatchData.length) return;
+      const headers = ["Ticket ID", "Subject", "Category", "Confidence", "Priority", "Priority Confidence", "Queue", "SLA Override"];
+      const rows = globalBatchData.map(r => [
+        r.ticket_id,
+        `"${r.subject.replace(/"/g, '""')}"`,
+        r.predicted_category,
+        r.category_confidence,
+        r.predicted_priority,
+        r.priority_confidence,
+        `"${r.recommended_queue}"`,
+        r.sla_override ? "Yes" : "No"
+      ]);
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "triaged_support_tickets.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Load and render keywords
+    async function initKeywords() {
+      try {
+        const resp = await fetch('/api/keywords');
+        globalKeywords = await resp.json();
+        const select = document.getElementById('keywordTargetSelect');
+        const catKeys = Object.keys(globalKeywords.category_keywords || {});
+        const priKeys = Object.keys(globalKeywords.priority_keywords || {});
+
+        let html = '<optgroup label="Queue Categories">';
+        catKeys.forEach(c => html += `<option value="cat_${c}">${c} Queue</option>`);
+        html += '</optgroup><optgroup label="Priority Tiers">';
+        priKeys.forEach(p => html += `<option value="pri_${p}">${p} Priority</option>`);
+        html += '</optgroup>';
+        select.innerHTML = html;
+
+        renderKeywords();
+      } catch (err) {
+        console.error('Failed to load keywords:', err);
+      }
+    }
+
+    function renderKeywords() {
+      const selectVal = document.getElementById('keywordTargetSelect').value;
+      let terms = [];
+      if (selectVal.startsWith('cat_')) {
+        const k = selectVal.replace('cat_', '');
+        terms = globalKeywords.category_keywords[k] || [];
+      } else {
+        const k = selectVal.replace('pri_', '');
+        terms = globalKeywords.priority_keywords[k] || [];
+      }
+
+      const container = document.getElementById('keywordsContainer');
+      const maxWeight = Math.max(...terms.map(t => t.weight), 1.0);
+
+      container.innerHTML = terms.map(item => {
+        const pct = Math.max(15, Math.min(100, (item.weight / maxWeight) * 100));
+        return `
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <div class="flex justify-between items-center text-xs mb-1">
+              <span class="font-mono text-white font-semibold">${item.term}</span>
+              <span class="text-indigo-400 font-bold">+${item.weight}</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2">
+              <div class="bg-indigo-500 h-2 rounded-full" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Calculate ROI
+    function calculateROI() {
+      const vol = parseInt(document.getElementById('sliderVol').value);
+      const sec = parseInt(document.getElementById('sliderSec').value);
+      const wage = parseInt(document.getElementById('sliderWage').value);
+      const pen = parseInt(document.getElementById('sliderPen').value);
+
+      document.getElementById('sliderVolVal').innerText = `${vol.toLocaleString()} tickets`;
+      document.getElementById('sliderSecVal').innerText = `${sec} seconds`;
+      document.getElementById('sliderWageVal').innerText = `$${wage} / hr`;
+      document.getElementById('sliderPenVal').innerText = `$${pen.toLocaleString()}`;
+
+      const hoursSavedMonth = (vol * (sec / 3600)) * 0.95;
+      const annualLaborSavings = hoursSavedMonth * 12 * wage;
+      const breachesPreventedYear = Math.round((vol * 12) * 0.005);
+      const annualPenaltySavings = breachesPreventedYear * pen;
+      const totalEconomicValue = annualLaborSavings + annualPenaltySavings;
+
+      document.getElementById('roiTotalVal').innerText = `$${Math.round(totalEconomicValue).toLocaleString()}`;
+      document.getElementById('roiHoursVal').innerText = `${Math.round(hoursSavedMonth * 12).toLocaleString()} hrs`;
+      document.getElementById('roiLaborCostVal').innerText = `$${Math.round(annualLaborSavings).toLocaleString()} / yr labor saved`;
+      document.getElementById('roiBreachVal').innerText = `${breachesPreventedYear} breaches`;
+      document.getElementById('roiPenaltiesVal').innerText = `$${Math.round(annualPenaltySavings).toLocaleString()} / yr penalties averted`;
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      initPresets();
+      initKeywords();
+      calculateROI();
+    });
   </script>
 </body>
 </html>

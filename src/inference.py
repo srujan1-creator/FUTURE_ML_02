@@ -77,11 +77,13 @@ def predict_ticket(
         "ticket_subject": subject,
         "predicted_category": cat_pred,
         "category_confidence": round(cat_conf, 4),
+        "category_distribution": {cls: round(float(prob), 4) for cls, prob in zip(cat_pipeline.classes_, cat_probas)},
         "predicted_priority": final_priority,
         "priority_confidence": round(pri_conf, 4),
+        "priority_distribution": {cls: round(float(prob), 4) for cls, prob in zip(pri_pipeline.classes_, pri_probas)},
         "recommended_queue": QUEUE_ROUTING_MAP.get(cat_pred, "General Support"),
         "sla_guardrail_override": sla_triggered,
         "matched_guardrail_rule": matched_rule,
         "human_triage_recommended": requires_human_triage,
-        "cleaned_preview": cleaned[:80] + ("..." if len(cleaned) > 80 else "")
+        "cleaned_preview": cleaned[:120] + ("..." if len(cleaned) > 120 else "")
     }
